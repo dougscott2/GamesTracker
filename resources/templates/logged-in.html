@@ -1,0 +1,25 @@
+<html>
+<body>
+Welcome {{username}}! <form action="logout" method="post"><button type="submit">Logout</button></form>
+<br>
+<form action="add-game" method="post">
+    Add game to library, {{username}}?
+    System? <br>
+    <input type="radio"  name="system" value="PS4"/> PS4 <br>
+    <input type="radio" name="system" value="Xbone"> Xbone <br>
+    <input type="radio" name="system" value="PC"/> PC<br>
+    <input type="text" placeholder="Title" name="newGame"/>  <br>
+    <button type="submit">Add Game to Library</button>
+</form> <br>
+
+Here are your games! <br>
+{{#games}}
+
+{{id}}. {{title}} for  {{system}}  <a href="/edit-game?id={{id}}">Edit</a>
+
+<a href="/delete-game?id={{id}}">Delete</a> <br>
+{{/games}}
+
+
+</body>
+</html>
