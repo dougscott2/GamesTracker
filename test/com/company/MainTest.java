@@ -51,7 +51,7 @@ public class MainTest {
         Main.insertUser(conn, "Bob", "");
         Main.insertGame(conn, 1,"Halo", "PC");
         Main.insertGame(conn, 2, "Drake's forture", "PS4");
-        ArrayList<Game> games = Main.selectGames(conn, 1);
+        ArrayList<Game> games = Main.selectGames(conn);
         endConnection(conn);
         assertTrue(games!= null);
     }

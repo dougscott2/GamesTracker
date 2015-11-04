@@ -60,18 +60,17 @@ public class Main {
         return game;
     }
 
-    public static ArrayList<Game> selectGames (Connection conn, int id ) throws SQLException{
+    public static ArrayList<Game> selectGames (Connection conn) throws SQLException{
         ArrayList<Game> games = new ArrayList();
        // Game game = null;
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM games INNER JOIN users ON games.user_id" +
-                " = users.id  WHERE games.id = ?");
-        stmt.setInt(1, id);
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM games");
+        //stmt.setInt(1, id);
         ResultSet results = stmt.executeQuery();
         while (results.next()){
            Game game = new Game();
             game.id = results.getInt("games.id");
             game.title = results.getString("games.title");
-            game.username = results.getString("users.name");
+//            game.username = results.getString("users.name");
             game.system = results.getString("games.system");
             games.add(game);
         }
@@ -100,9 +99,12 @@ public class Main {
                     Session session = request.session();
                     String username = session.attribute("username");
                     HashMap m = new HashMap();
-                    ArrayList<Game> games = selectGames(conn, 1);
+                    //int i = 1;
+
+                    ArrayList<Game> games = selectGames(conn);
                     m.put("username", username);
                     m.put("games", games);
+                   // i++;
                     if (username == null) {
                         return new ModelAndView(m, "not-logged-in.html");
                     }
