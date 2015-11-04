@@ -14,7 +14,6 @@ public class Main {
         Statement stmt = conn.createStatement();
         stmt.execute("CREATE TABLE IF NOT EXISTS users (id IDENTITY, name VARCHAR, password VARCHAR)");
         stmt.execute("CREATE TABLE IF NOT EXISTS games (id IDENTITY, user_id INT, title VARCHAR, system VARCHAR)");
-
     }
     public static void insertUser(Connection conn, String name, String password) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO users VALUES (NULL, ?, ?)");
@@ -59,6 +58,21 @@ public class Main {
         }
         return game;
     }
+    public static void editGame (Connection conn, String title, String system, int id) throws SQLException {
+        Game game = null;
+        PreparedStatement stmt = conn.prepareStatement("UPDATE games SET title = ?, system = ? WHERE id = ?");
+        stmt.setString(1, title);
+        stmt.setString(2, system);
+        stmt.setInt(3, id);
+        stmt.execute();
+    }
+    public static void deleteGame(Connection conn, int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM games WHERE id = ?");
+        stmt.setInt(1, id);
+        stmt.execute();
+    }
+
+
 
     public static ArrayList<Game> selectGames (Connection conn) throws SQLException{
         ArrayList<Game> games = new ArrayList();
@@ -155,16 +169,17 @@ public class Main {
                     return "";
                 })
         );
-     /*   Spark.get(
+       Spark.get(
                 "/delete-game",
                 ((request, response) -> {
                     String id = request.queryParams("id");
                     try {
                         int idNum = Integer.valueOf(id);
-                        games.remove(idNum - 1);
+                        /*games.remove(idNum - 1);
                         for (int i = 0; i < games.size(); i++) {
                             games.get(i).id = i + 1;
-                        }
+                        }*/
+                        deleteGame(conn, idNum);
                     } catch (Exception e){}
                     response.redirect("/");
                     return "";
@@ -189,8 +204,11 @@ public class Main {
                         int idNum = Integer.valueOf(id);
                         //Game game = games.get(idNum - 1);
                         //game.title = request.queryParams("newGame");
-                        games.get(idNum-1).title = request.queryParams("editGame");
-                        games.get(idNum-1).system = request.queryParams("editSystem");
+                       // games.get(idNum-1).title = request.queryParams("editGame");
+                        //games.get(idNum-1).system = request.queryParams("editSystem");
+                        String title = request.queryParams("editGame");
+                        String system = request.queryParams("editSystem");
+                        editGame(conn, title, system, idNum);
                     }
                     catch (Exception e){
 
@@ -198,7 +216,7 @@ public class Main {
                     response.redirect("/");
                     return "";
                 })
-        ); */
+        );
         Spark.post(
                 "/logout",
                 ((request, response) -> {

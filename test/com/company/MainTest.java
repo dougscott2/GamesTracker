@@ -55,5 +55,25 @@ public class MainTest {
         endConnection(conn);
         assertTrue(games!= null);
     }
+    @Test
+    public void testEditGame() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Alice", "");
+        Main.insertGame(conn, 1, "Halo", "Xbox One");
+        Main.editGame(conn, "Drake's Fortune", "PS4", 1);
+        ArrayList<Game> games = Main.selectGames(conn);
+        endConnection(conn);
+        assertTrue(games!=null);
+    }
+    @Test
+    public void testDeleteGame() throws SQLException {
+        Connection conn = startConnection();
+        Main.insertUser(conn, "Alice", "");
+        Main.insertGame(conn, 1, "Halo", "Xbox One");
+        Main.deleteGame(conn, 1);
+        ArrayList<Game> games = Main.selectGames(conn);
+        endConnection(conn);
+        assertTrue(games!=null);
+    }
 
 }
